@@ -44,6 +44,19 @@ const MOTIONS: { v: MotionLevel; label: string }[] = [
   { v: 'vivid', get label() { return tx('많이', 'High'); } },
 ];
 
+/** 두 칸 배치(room.css의 1024px)인지. 넓은 화면에서는 악기별 그림 아래 빈 곳에 자세히 보기를 함께 둔다 */
+const WIDE_MQ = '(min-width: 1024px)';
+function useWide() {
+  const [wide, setWide] = useState(() => window.matchMedia(WIDE_MQ).matches);
+  useEffect(() => {
+    const m = window.matchMedia(WIDE_MQ);
+    const on = () => setWide(m.matches);
+    m.addEventListener('change', on);
+    return () => m.removeEventListener('change', on);
+  }, []);
+  return wide;
+}
+
 export default function Room() {
   const params = useParams();
   const song: SongId = params.song === 'song2' ? 'song2' : 'hbd';
@@ -70,6 +83,7 @@ function RoomInner({ song }: { song: SongId }) {
   const [revealed, setRevealed] = useState(false);
   const [blindNums, setBlindNums] = useState<Record<InstrumentId, number>>(() => Object.fromEntries(INSTRUMENTS.map((id, i) => [id, i + 1])) as Record<InstrumentId, number>);
   const [live, setLive] = useState('');
+  const wide = useWide();
 
   // 마운트: 곡 불러오기, 듣기 우선 흐름, 곡 바꾼 뒤 카드
   useEffect(() => {
@@ -359,7 +373,10 @@ function RoomInner({ song }: { song: SongId }) {
         {view !== 'off' && !(blind && !revealed) ? (
           <div className="room-viz">
             {view === 'lanes' ? (
-              <Lanes on={st.on} pitchLines={profile.viz.pitchLines} bassEmphasis={profile.bassVizEmphasis} motion={profile.viz.motion} />
+              <>
+                <Lanes on={st.on} pitchLines={profile.viz.pitchLines} bassEmphasis={profile.bassVizEmphasis} motion={profile.viz.motion} />
+                {wide && <div className="room-viz-more"><Explore on={st.on} /></div>}
+              </>
             ) : (
               <Explore on={st.on} />
             )}

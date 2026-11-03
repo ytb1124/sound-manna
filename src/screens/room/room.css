@@ -7,6 +7,8 @@
 .room-songlist .btn { justify-content: space-between; }
 .room-live { min-height: 24px; font-weight: 600; color: var(--body-strong); }
 .room-viz { min-width: 0; overflow: hidden; }
+.room-see > .room-viz { flex-shrink: 0; }
+.room-viz-more { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--hairline); }
 
 .room-transport {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
