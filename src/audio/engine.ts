@@ -1,5 +1,5 @@
 // 오디오 엔진. 구성안 7.5절 스케치를 TypeScript로 옮겼다.
-// 그래프: 스템마다 [소스 → 뮤트 게인 → 사용자 게인 → 저음 쉘프 → (펼침일 때만 패너) → 분석기] → EQ 저음 → EQ 또렷함 → 밸런스 → 마스터 → 출력
+// 그래프: 스템마다 [소스 → 뮤트 게인 → 사용자 게인 → 저음 쉘프 → (펼침일 때만 패너) → 분석기] → EQ 저음 → EQ 또렷함 → 밸런스 → 마스터 → (원음 | CI 체험 보코더) → 출력
 // 단서 질문·보정 클립은 clipIn(EQ 뒤)으로 들어가 마스터 크기·라우팅만 적용된다(4.4절).
 
 import { SONGS, beatToSec, type SongConfig } from '../config/songs';
@@ -10,6 +10,7 @@ import type { InstrumentId, PlaceholderShape, Profile, SectionDef, SongId, StemI
 import { INSTRUMENTS } from '../types';
 import { placeholderOnsets, renderStem } from './placeholder';
 import { analyzeBuffer, fetchTimeline, rmsAt, type Timeline } from './timeline';
+import { Vocoder, type VocoderOptions } from './vocoder';
 
 const STEMS: StemId[] = ['piano', 'cajon', 'bass', 'trumpet', 'bassOct'];
 const allInst = (v: boolean) => Object.fromEntries(INSTRUMENTS.map((i) => [i, v])) as Record<InstrumentId, boolean>;
@@ -55,6 +56,8 @@ export interface EngineState {
   /** 지금 재생 중인 클립 id(단서 질문 A/B 등) */
   clip: string | null;
   sources: Record<StemId, 'file' | 'placeholder'>;
+  /** CI 소리 체험(청인용 보코더). 저장하지 않고, 합주실을 나가면 꺼진다 */
+  vocoder: VocoderOptions & { on: boolean };
 }
 
 const initialState: EngineState = {
@@ -73,6 +76,7 @@ const initialState: EngineState = {
   alternating: null,
   clip: null,
   sources: { piano: 'placeholder', cajon: 'placeholder', bass: 'placeholder', trumpet: 'placeholder', bassOct: 'placeholder' },
+  vocoder: { on: false, channels: 8, carrier: 'noise' },
 };
 
 class AudioEngine {
@@ -82,6 +86,9 @@ class AudioEngine {
   private eqMid!: BiquadFilterNode;
   private balance!: StereoPannerNode;
   private master!: GainNode;
+  private dry!: GainNode;
+  private wet!: GainNode;
+  private vocoder: Vocoder | null = null;
   /** 클립 입력(EQ 뒤) */
   private clipIn!: GainNode;
   private stems = {} as Record<StemId, StemNode>;
@@ -159,7 +166,10 @@ class AudioEngine {
     this.balance = new StereoPannerNode(ctx, { pan: 0 });
     this.master = new GainNode(ctx, { gain: 1 });
     this.clipIn = new GainNode(ctx, { gain: 1 });
-    this.eqLow.connect(this.eqMid).connect(this.balance).connect(this.master).connect(ctx.destination);
+    this.dry = new GainNode(ctx, { gain: 1 });
+    this.wet = new GainNode(ctx, { gain: 0 });
+    this.eqLow.connect(this.eqMid).connect(this.balance).connect(this.master).connect(this.dry).connect(ctx.destination);
+    this.wet.connect(ctx.destination);
     this.clipIn.connect(this.balance);
     for (const id of STEMS) {
       const s: StemNode = {
@@ -359,6 +369,29 @@ class AudioEngine {
     return this.song;
   }
 
+  // ───────── CI 소리 체험(보코더) ─────────
+  setVocoder(p: Partial<VocoderOptions & { on: boolean }>) {
+    const next = { ...this.state.vocoder, ...p };
+    this.patch({ vocoder: next });
+    if (!this.ctx) return;
+    const old = this.vocoder;
+    const changed = !old || p.channels !== undefined || p.carrier !== undefined;
+    if (next.on && changed) {
+      // 새 보코더를 만들고 50 ms 뒤 옛것을 치운다(교대 중 끊김 없게)
+      const v = new Vocoder(this.ctx, next);
+      this.master.connect(v.input);
+      v.output.connect(this.wet);
+      this.vocoder = v;
+      if (old) window.setTimeout(() => old.dispose(), 50);
+    }
+    this.ramp(this.dry.gain, next.on ? 0 : 1, 0.015);
+    this.ramp(this.wet.gain, next.on ? 1 : 0, 0.015);
+    if (!next.on && old) {
+      this.vocoder = null;
+      window.setTimeout(() => old.dispose(), 120);
+    }
+  }
+
   timeline(id: StemId): Timeline | null {
     return this.stems[id]?.timeline ?? null;
   }
@@ -458,10 +491,10 @@ class AudioEngine {
 
   // ───────── (4) 지연 보정: 시각 계산 함수는 하나 ─────────
   /** 지금 스피커에서 나는 소리의 컨텍스트 시각 */
-  audibleCtxTime(): number {
+  audibleCtxTime(withUserOffset = true): number {
     const ctx = this.ctx;
     if (!ctx) return 0;
-    const userOffsetSec = profileStore.get().sync.userOffsetMs / 1000; // + = 그림을 더 늦춤
+    const userOffsetSec = withUserOffset ? profileStore.get().sync.userOffsetMs / 1000 : 0; // + = 그림을 더 늦춤
     const ts = ctx.getOutputTimestamp ? ctx.getOutputTimestamp() : null;
     if (ts && ts.contextTime && ts.contextTime > 0 && ts.performanceTime)
       return ts.contextTime + (performance.now() - ts.performanceTime) / 1000 - userOffsetSec;
@@ -671,6 +704,15 @@ class AudioEngine {
   }
 
   /** 깜빡임 표시용: 지금 들리는 클릭으로부터 지난 시간(초). 클릭 중이 아니면 null */
+  /** 탭으로 맞추기: 지금 누른 순간이 가장 가까운 클릭보다 몇 초 늦은지(− = 빠름). 사용자 보정값은 빼고 잰다 */
+  syncTapError(): number | null {
+    if (this.syncTimer === null) return null;
+    const t = this.audibleCtxTime(false) - this.syncStart;
+    if (t < -this.syncInterval / 2) return null;
+    const k = Math.round(t / this.syncInterval);
+    return t - k * this.syncInterval;
+  }
+
   syncPhase(): number | null {
     if (this.syncTimer === null) return null;
     const t = this.audibleCtxTime() - this.syncStart;

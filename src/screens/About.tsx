@@ -54,7 +54,7 @@ export default function About() {
         <h2 id="ab-loop" className="about-h">{tx('이렇게 이어져요', 'How it flows')}</h2>
         <ol className="about-list">
           <li><strong>{tx('소리 맞추기', 'Sound setup')}</strong>: {tx('내 귀에 편한 소리를 골라요. 3–5분 걸리고, 시험이 아니에요. 언제든 바꿀 수 있어요.', 'Pick the sound that feels comfortable to you. It takes 3–5 minutes and it is not a test. You can change it at any time.')}</li>
-          <li><strong>{tx('합주실', 'Ensemble Room')}</strong>: {tx('악기 그림을 눌러 한 악기만 듣거나, 그림을 보며 듣거나, 다시 들어요.', 'Tap an instrument to hear it alone, listen while watching the pictures, or listen again.')}</li>
+          <li><strong>{tx('만나 합주실', 'Manna Ensemble Room')}</strong>: {tx('악기 그림을 눌러 한 악기만 듣거나, 그림을 보며 듣거나, 다시 들어요.', 'Tap an instrument to hear it alone, listen while watching the pictures, or listen again.')}</li>
           <li><strong>{tx('잠깐 질문', 'Quick questions')}</strong>: {tx('"얼마나 달라요?", "어느 쪽이 더 또렷해요?" 같은 정답 없는 질문이에요.', 'Questions with no right answer, like "How different are they?" or "Which one is clearer?"')}</li>
           <li><strong>{tx('나의 청취 단서', 'My Listening Cues')}</strong>: {tx('내가 느낀 것, 고른 것, 말한 것, 합주실에서 한 것을 나란히 보여 줘요.', 'Shows what you felt, what you picked, what you said, and what you did in the room, side by side.')}</li>
         </ol>

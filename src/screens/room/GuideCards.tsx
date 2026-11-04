@@ -9,7 +9,16 @@ interface Card {
   text: string;
   tone: 'lavender' | 'peach' | 'ochre' | 'mint';
   action?: 'trumpet' | 'cajon' | 'alternate' | 'line3';
+  /** 응답 버튼(없으면 들렸어요·조금·잘 모르겠어요·닫기) */
+  answers?: 'feeling';
 }
+
+const FEELING_CARD = (id: string): Card => ({
+  id,
+  get text() { return tx('모두 함께 들으면서, 이 곡이 어떤 느낌으로 다가오는지 골라 보세요. 사람마다 다르게 느껴도 괜찮아요.', 'Listen all together and choose how this song feels to you. It is fine if it feels different for each person.'); },
+  tone: 'peach',
+  answers: 'feeling',
+});
 
 const HBD_CARDS: Card[] = [
   { id: 'hbd-1', get text() { return tx('트럼펫만 켜 보세요. 멜로디를 따라갈 수 있나요?', 'Turn on only the trumpet. Can you follow the melody?'); }, tone: 'lavender', action: 'trumpet' },
@@ -17,16 +26,26 @@ const HBD_CARDS: Card[] = [
   { id: 'hbd-3', get text() { return tx('베이스를 켰다 껐다 하며 번갈아 들어 보세요. 무엇이 달라지나요?', 'Turn the bass on and off and listen to both. What changes?'); }, tone: 'ochre', action: 'alternate' },
   { id: 'hbd-4', get text() { return tx('3줄을 반복해 보세요. 멜로디가 크게 뛰어오르는 곳이 있어요. 느껴지나요?', 'Loop line 3. The melody makes a big jump up there. Can you feel it?'); }, tone: 'mint', action: 'line3' },
   { id: 'hbd-5', get text() { return tx('다시 모두 함께 들으면서, 아까 혼자 들었던 악기를 찾아보세요.', 'Listen all together again, and try to find the instruments you heard alone.'); }, tone: 'lavender' },
+  FEELING_CARD('hbd-feel'),
 ];
 const GENERIC_CARDS: Card[] = [
   { id: 'gen-1', get text() { return tx('트럼펫만 켜 보세요. 멜로디를 따라갈 수 있나요?', 'Turn on only the trumpet. Can you follow the melody?'); }, tone: 'lavender', action: 'trumpet' },
   { id: 'gen-2', get text() { return tx('카혼만 켜 보세요. 박자를 따라갈 수 있나요?', 'Turn on only the cajon. Can you follow the beat?'); }, tone: 'peach', action: 'cajon' },
   { id: 'gen-5', get text() { return tx('다시 모두 함께 들으면서, 아까 혼자 들었던 악기를 찾아보세요.', 'Listen all together again, and try to find the instruments you heard alone.'); }, tone: 'lavender' },
+  FEELING_CARD('gen-feel'),
 ];
 
 const ANSWERS: { v: CardAnswer; label: string }[] = [
   { v: 'heard', get label() { return tx('들렸어요', 'I heard it'); } },
   { v: 'some', get label() { return tx('조금', 'Somewhat'); } },
+  { v: 'unsure', get label() { return tx('잘 모르겠어요', 'Not sure'); } },
+  { v: 'close', get label() { return tx('닫기', 'Close'); } },
+];
+const FEELINGS: { v: CardAnswer; label: string }[] = [
+  { v: 'happy', get label() { return tx('신나요', 'Cheerful'); } },
+  { v: 'warm', get label() { return tx('따뜻해요', 'Warm'); } },
+  { v: 'calm', get label() { return tx('차분해요', 'Calm'); } },
+  { v: 'sad', get label() { return tx('쓸쓸해요', 'Lonely'); } },
   { v: 'unsure', get label() { return tx('잘 모르겠어요', 'Not sure'); } },
   { v: 'close', get label() { return tx('닫기', 'Close'); } },
 ];
@@ -96,7 +115,7 @@ export function GuideCards({ song, onSolo }: { song: SongId; onSolo: (id: Instru
         )}
       </div>
       <div className="row" role="group" aria-label={tx('응답', 'Your answer')}>
-        {ANSWERS.map((a) => (
+        {(card.answers === 'feeling' ? FEELINGS : ANSWERS).map((a) => (
           <button key={a.v} type="button" className="btn btn-sm" onClick={() => answer(a.v)}>
             {a.label}
           </button>

@@ -18,6 +18,7 @@ import {
 import { TransportBar } from './TransportBar';
 import { AdvancedPanel } from './AdvancedPanel';
 import { GuideCards } from './GuideCards';
+import { BeatTap } from './BeatTap';
 import { ListenFirst } from './ListenFirst';
 import { ko, tx } from '../../i18n';
 import './room.css';
@@ -102,6 +103,7 @@ function RoomInner({ song }: { song: SongId }) {
       engine.stopAlternate();
       engine.setPreview(null);
       engine.setBypass(false);
+      engine.setVocoder({ on: false });
       document.documentElement.style.removeProperty('--transport-h');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -322,12 +324,17 @@ function RoomInner({ song }: { song: SongId }) {
         {/* 넓은 화면: 왼쪽 듣기(연주자) · 오른쪽 보기(그림)를 나란히. 좁은 화면은 위아래 */}
         <div className="room-stage">
         <section className="room-listen stack-lg" aria-label={tx('듣기', 'Listen')}>
-        <Segmented<RoomMode>
-          label={tx('듣는 방식', 'Listening mode')}
-          value={mode}
-          onChange={changeMode}
-          options={[{ value: 'solo', label: tx('골라 듣기', 'Solo') }, { value: 'toggle', label: tx('빼고 듣기', 'Mute') }]}
-        />
+        <div className="room-mode-row">
+          <Segmented<RoomMode>
+            label={tx('듣는 방식', 'Listening mode')}
+            value={mode}
+            onChange={changeMode}
+            options={[{ value: 'solo', label: tx('골라 듣기', 'Solo') }, { value: 'toggle', label: tx('빼고 듣기', 'Mute') }]}
+          />
+          <button type="button" className="btn btn-primary" onClick={allTogether}>
+            {tx('모두 함께 듣기', 'All together')}
+          </button>
+        </div>
 
         <div className="room-cards">
           {INSTRUMENTS.map((id) => (
@@ -347,9 +354,6 @@ function RoomInner({ song }: { song: SongId }) {
             />
           ))}
         </div>
-        <button type="button" className="btn btn-primary btn-lg btn-block" onClick={allTogether}>
-          {tx('모두 함께 듣기', 'All together')}
-        </button>
         <p className="room-live" role="status" aria-live="polite">{live}</p>
 
         {blind && !revealed && (
@@ -422,6 +426,8 @@ function RoomInner({ song }: { song: SongId }) {
         <AdvancedPanel song={song} blind={blind} onBlind={toggleBlind} onReveal={() => { setRevealed(true); logEvent({ type: 'blind', value: 'reveal' }); }} revealed={revealed} />
 
         <GuideCards song={song} onSolo={soloFromCard} />
+
+        <BeatTap song={song} onSolo={soloFromCard} />
 
         <div className="row">
           <Link className="btn btn-block" to={probeTarget}>

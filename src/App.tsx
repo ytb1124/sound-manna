@@ -31,18 +31,18 @@ function TopBar() {
   const admin = pathname.startsWith('/admin');
   return (
     <header className="topbar">
-      <NavLink to="/" className="brand" aria-label={tx('인공와우 합주실 처음으로', 'CI Ensemble Room home')}>
+      <NavLink to="/" className="brand" aria-label={tx('소리와 만나 처음으로', 'Sound Manna home')}>
         <svg width="28" height="28" viewBox="0 0 64 64" aria-hidden="true">
           <rect width="64" height="64" rx="16" fill="var(--primary)" />
           <circle cx="24" cy="40" r="9" fill="#ffb084" />
           <rect x="31" y="14" width="5" height="27" rx="2.5" fill="#ffb084" />
           <path d="M36 14c8 2 12 6 12 12" stroke="#ffb084" strokeWidth="5" fill="none" strokeLinecap="round" />
         </svg>
-        {tx('인공와우 합주실', 'CI Ensemble Room')}
+        {tx('소리와 만나', 'Sound Manna')}
       </NavLink>
       {!minimal && (
         <nav aria-label={tx('주 메뉴', 'Main menu')}>
-          <NavLink to="/room/hbd">{tx('합주실', 'Ensemble Room')}</NavLink>
+          <NavLink to="/room/hbd">{tx('만나 합주실', 'Manna Ensemble Room')}</NavLink>
           <NavLink to="/report">{tx('나의 청취 단서', 'My Listening Cues')}</NavLink>
           <NavLink to="/settings">{tx('설정', 'Settings')}</NavLink>
         </nav>
@@ -75,7 +75,7 @@ function LangSync() {
   const lang = useLang();
   useEffect(() => {
     document.documentElement.lang = lang;
-    document.title = tx('인공와우 합주실', 'CI Ensemble Room');
+    document.title = tx('소리와 만나', 'Sound Manna');
   }, [lang]);
   return null;
 }

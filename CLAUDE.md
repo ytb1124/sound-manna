@@ -1,4 +1,6 @@
-# 인공와우 합주실 (ci-ensemble-room)
+# 소리와 만나 (ci-ensemble-room)
+
+플랫폼 이름은 **소리와 만나**(만나: 성서의 만나), 합주실 이름은 **만나 합주실**이다. 영어는 임시로 Sound Manna / Manna Ensemble Room.
 
 인공와우(CI) 사용자가 악기별로 소리를 켜고 끄며 "나에게 잘 들리는 소리"를 찾는 웹 프로토타입. 주 사용자는 한국어를 쓰는 CI 사용자(고령 포함).
 자세한 화면·구조·가정은 [README.md](README.md), 요구사항 진행 상황은 [CHECKLIST.md](CHECKLIST.md)에 있다. 이 파일은 작업할 때 꼭 지킬 것만 적는다.

@@ -1,5 +1,6 @@
 .room-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 .room-head h1 { font-size: 22px; margin: 0; letter-spacing: -0.3px; flex: 1 1 auto; text-align: center; min-width: 0; }
+.room-mode-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .room-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 @media (min-width: 640px) { .room-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (min-width: 600px) { .room-cards { gap: 16px; } }

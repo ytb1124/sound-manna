@@ -80,10 +80,13 @@ export type LogEvent =
   | { type: 'loop'; t: number; section: string; song: SongId }
   | { type: 'alternate'; t: number; instrument: InstrumentId; song: SongId }
   | { type: 'view' | 'motion' | 'blind'; t: number; value: string }
-  | { type: 'card'; t: number; cardId: string; answer: CardAnswer };
+  | { type: 'card'; t: number; cardId: string; answer: CardAnswer }
+  /** 박자 따라 치기: 누른 횟수와 박자와의 평균 차이(+ = 늦게 누름) */
+  | { type: 'beattap'; t: number; song: SongId; taps: number; meanMs: number };
 
 export type RoomMode = 'solo' | 'toggle';
-export type CardAnswer = 'heard' | 'some' | 'unsure' | 'close';
+/** heard·some·unsure·close: 들렸는지. happy·warm·calm·sad: 느낌 카드(정답 없음) */
+export type CardAnswer = 'heard' | 'some' | 'unsure' | 'close' | 'happy' | 'warm' | 'calm' | 'sad';
 
 // ───────── 단서 질문 (구성안 6절) ─────────
 export type CueId = 'attack' | 'bright' | 'contour' | 'rhythm';

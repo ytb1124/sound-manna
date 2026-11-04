@@ -3,8 +3,8 @@ import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { SoundOnButton } from '../components/SoundGate';
 import { Icon } from '../components/ui/Icon';
-import { DbSlider, Segmented } from '../components/ui/controls';
-import { SyncCard } from '../components/viz/SyncCard';
+import { Segmented } from '../components/ui/controls';
+import { OffsetStepper, SyncCard } from '../components/viz/SyncCard';
 import { engine, useEngineState } from '../audio/useEngine';
 import { logEvent } from '../store/log';
 import { updateProfile, useProfile } from '../store/profile';
@@ -161,17 +161,11 @@ export default function Settings() {
         <p className="small muted">
           {tx('그림이 소리보다 늦거나 빠르면 맞춰 보세요. 지금 방식:', 'If the pictures are behind or ahead of the sound, adjust them. Current method:')} <strong>{syncMethod}</strong>
         </p>
-        <DbSlider
+        <OffsetStepper
           label={tx('직접 맞추기', 'Adjust by hand')}
           value={p.sync.userOffsetMs}
-          min={-300}
-          max={300}
-          step={10}
-          unit="ms"
-          formatValue={(v) => `${v > 0 ? '+' : ''}${v} ms`}
           onChange={(v) => updateProfile((cur) => ({ sync: { ...cur.sync, userOffsetMs: v } }))}
         />
-        <p className="small muted">{tx('+는 그림을 늦추고, −는 그림을 앞당겨요.', '+ delays the pictures, − moves them earlier.')}</p>
         <div className="row">
           {syncOpen ? null : st.unlocked ? (
             <button type="button" className="btn" onClick={() => setSyncOpen(true)}>

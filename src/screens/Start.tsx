@@ -18,7 +18,7 @@ export default function Start() {
   return (
     <main className="page page-narrow stack-lg">
       <header className="stack" style={{ paddingTop: 16 }}>
-        <h1 style={{ fontSize: 40, margin: 0 }}>{tx('인공와우 합주실', 'CI Ensemble Room')}</h1>
+        <h1 style={{ fontSize: 40, margin: 0 }}>{tx('소리와 만나', 'Sound Manna')}</h1>
         <p className="lead" style={{ margin: 0 }}>
           {tx(
             '정답을 맞히는 곳이 아니라, 나에게 잘 들리는 소리를 찾아보는 곳이에요.',
@@ -120,7 +120,7 @@ export default function Start() {
         <h2 id="flow-h" style={{ margin: 0, fontSize: 22 }}>{tx('이렇게 진행해요', 'How it works')}</h2>
         <ol className="cal-flow">
           <li>{tx('1. 소리 맞추기', '1. Sound setup')}</li>
-          <li>{tx('2. 합주실', '2. Ensemble Room')}</li>
+          <li>{tx('2. 만나 합주실', '2. Manna Ensemble Room')}</li>
           <li>{tx('3. 잠깐 질문', '3. Quick questions')}</li>
           <li>{tx('4. 나의 청취 단서', '4. My Listening Cues')}</li>
         </ol>

@@ -88,6 +88,8 @@ export function AdvancedPanel({
               <button type="button" className="btn btn-sm" onClick={onReveal}>{tx('이름 보기', 'Show names')}</button>
             )}
           </div>
+          <VocoderTry />
+
           <p className="small muted" style={{ margin: 0 }}>
             {st.bypass ? tx('지금은 내 설정을 잠시 끄고 원래 소리를 들어요. 다시 누르면 내 설정으로 돌아가요.', 'Your settings are off for now, so you hear the original sound. Press again to go back to your settings.') : tx('[내 설정 끄고 비교하기]를 켜면 원래 소리와 비교할 수 있어요.', 'Turn on [Compare without my settings] to compare with the original sound.')}
             {' '}{tx('[혼자 들어도 같은 크기로]를 켜면 한 악기만 들을 때도 소리가 작아지지 않아요.', 'Turn on [Same volume when solo] so one instrument alone does not sound quieter.')}
@@ -95,5 +97,42 @@ export function AdvancedPanel({
         </div>
       )}
     </section>
+  );
+}
+
+/** 청인(가족·팀원·발표 청중)이 CI 소리를 대략 체험해 보는 보코더. 저장하지 않고 연구 기록에도 남기지 않는다 */
+function VocoderTry() {
+  const { vocoder: v } = useEngineState();
+  const channels = [4, 8, 16];
+  return (
+    <div className="stack" role="group" aria-label={tx('인공와우 소리 체험', 'Cochlear implant sound demo')}>
+      <h3 style={{ margin: 0 }}>{tx('인공와우 소리 체험 (들을 수 있는 분용)', 'Cochlear implant sound demo (for hearing listeners)')}</h3>
+      <p className="small muted" style={{ margin: 0 }}>
+        {tx('가족이나 주변 사람이 인공와우로 듣는 느낌을 대략 들어 보는 기능이에요. 소리를 몇 개의 띠로 나누고 크기 변화만 남겨요. 실제 인공와우 소리와는 많이 다를 수 있어요. 인공와우를 쓰는 분께는 도움이 되지 않아요.', 'This lets family and others get a rough sense of listening with a cochlear implant. It splits the sound into a few bands and keeps only how loud each band is. It can be very different from real implant sound. It does not help people who use an implant.')}
+      </p>
+      <div className="row">
+        <Chip pressed={v.on} onClick={() => engine.setVocoder({ on: !v.on })}>
+          {v.on ? tx('체험 소리 켜짐', 'Demo sound on') : tx('체험 소리 켜기', 'Turn on demo sound')}
+        </Chip>
+      </div>
+      {v.on && (
+        <>
+          <div className="row" role="group" aria-label={tx('띠 개수', 'Number of bands')}>
+            <span className="small">{tx('띠 개수', 'Bands')}</span>
+            {channels.map((n) => (
+              <Chip key={n} pressed={v.channels === n} onClick={() => engine.setVocoder({ channels: n })}>{n}</Chip>
+            ))}
+          </div>
+          <div className="row" role="group" aria-label={tx('바탕 소리', 'Carrier sound')}>
+            <span className="small">{tx('바탕 소리', 'Carrier')}</span>
+            <Chip pressed={v.carrier === 'noise'} onClick={() => engine.setVocoder({ carrier: 'noise' })}>{tx('잡음', 'Noise')}</Chip>
+            <Chip pressed={v.carrier === 'sine'} onClick={() => engine.setVocoder({ carrier: 'sine' })}>{tx('순음', 'Tones')}</Chip>
+          </div>
+          <p className="small muted" style={{ margin: 0 }}>
+            {tx('띠가 적을수록 음높이가 더 흐려져요. 지금 소리는 녹음 전 자리표시라서 차이가 잘 들리지 않을 수 있어요.', 'Fewer bands make pitch blurrier. The current sound is a placeholder before recording, so the difference may be hard to hear.')}
+          </p>
+        </>
+      )}
+    </div>
   );
 }
