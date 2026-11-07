@@ -5,15 +5,15 @@ import { engine, useEngineState } from '../audio/useEngine';
 import { Icon } from './ui/Icon';
 import { tx } from '../i18n';
 
-export function SoundOnButton({ onDone, label = tx('소리 켜기', 'Turn on sound') }: { onDone?: () => void; label?: string }) {
+export function SoundOnButton({ onDone, label = tx('소리 켜기', 'Turn on sound'), align = 'center' }: { onDone?: () => void; label?: string; align?: 'center' | 'start' }) {
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
   return (
-    <div className="stack" style={{ alignItems: 'center' }}>
+    <div className="stack" style={{ alignItems: align === 'start' ? 'flex-start' : 'center' }}>
       <button
         type="button"
         className="btn btn-primary btn-lg"
-        style={{ minWidth: 220, minHeight: 64, fontSize: 20 }}
+        style={{ minWidth: 200 }}
         disabled={busy}
         onClick={async () => {
           setBusy(true);
@@ -23,10 +23,10 @@ export function SoundOnButton({ onDone, label = tx('소리 켜기', 'Turn on sou
           if (ok) onDone?.();
         }}
       >
-        <Icon name="speaker" size={26} />
+        <Icon name="speaker" size={22} />
         {busy ? tx('켜는 중…', 'Turning on…') : label}
       </button>
-      <p className="small muted" style={{ textAlign: 'center' }}>
+      <p className="small muted" style={{ textAlign: align === 'start' ? 'left' : 'center' }}>
         {tx('아이폰이라면 무음 모드를 꺼 주세요.', 'On an iPhone, please turn off silent mode.')}
       </p>
       {failed && (
@@ -59,7 +59,7 @@ export function ResumeBanner() {
   return (
     <div className="resume-banner" role="status">
       <span>{tx('소리가 멈췄어요.', 'The sound stopped.')}</span>
-      <button type="button" className="btn btn-sm" style={{ background: '#fffaf0', color: '#0a0a0a' }} onClick={() => void engine.unlock()}>
+      <button type="button" className="btn btn-sm" style={{ background: '#faf8f4', color: '#1b1b1a' }} onClick={() => void engine.unlock()}>
         <Icon name="speaker" size={18} /> {tx('다시 켜기', 'Turn on again')}
       </button>
     </div>

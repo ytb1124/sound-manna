@@ -42,10 +42,10 @@ export default function Start() {
           )}
         </p>
 
-        {!st.unlocked && <SoundOnButton />}
+        {!st.unlocked && <SoundOnButton align="start" />}
 
         {st.unlocked && !profile.calibrated && (
-          <div className="stack">
+          <div className="stack actions-fit">
             <button type="button" className="btn btn-primary btn-lg btn-block" onClick={() => nav('/calibrate')}>
               {tx('소리 맞추기 (3–5분)', 'Sound setup (3–5 min)')} <Icon name="chevronRight" />
             </button>
@@ -54,7 +54,7 @@ export default function Start() {
                 {tx('건너뛰고 합주실로', 'Skip to the Ensemble Room')}
               </button>
             ) : (
-              <div className="stack" role="status">
+              <div className="stack actions-fit" role="status">
                 <p style={{ margin: 0 }}>
                   {tx('소리 맞추기는 나중에 설정에서 할 수 있어요.', 'You can do sound setup later in Settings.')}
                 </p>

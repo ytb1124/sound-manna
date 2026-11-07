@@ -127,7 +127,7 @@
 .inst-cardbox {
   display: flex; flex-direction: column; min-width: 0;
   background: var(--surface-card);
-  border: 2px solid transparent;
+  border: 2px solid var(--hairline);
   border-radius: var(--r-xl);
   overflow: hidden;
   transition: border-color 120ms ease;

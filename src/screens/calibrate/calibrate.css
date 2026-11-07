@@ -6,7 +6,7 @@
 .cal-choice { justify-content: flex-start; text-align: left; min-height: 52px; height: auto; padding: 10px 16px; white-space: normal; line-height: 1.4; }
 .cal-choices.cal-3 .cal-choice, .cal-choices.cal-2 .cal-choice { justify-content: center; text-align: center; flex-direction: column; }
 .cal-group-title { margin: 0; font-size: 17px; }
-.cal-note { padding: 12px 14px; border-radius: 16px; background: var(--surface-soft); border: 1px solid var(--hairline); }
+.cal-note { padding: 12px 14px; border-radius: var(--r-sm); background: var(--surface-soft); border: 1px solid var(--hairline); }
 .cal-list { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
 .cal-nav { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
 .cal-nav .cal-nav-right { display: flex; gap: 8px; flex-wrap: wrap; margin-left: auto; }
@@ -17,22 +17,24 @@
 .cal-sum li:last-child { border-bottom: 0; }
 .cal-sum-label { font-weight: 600; color: var(--body-strong); }
 .cal-start-grid { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
-.cal-flow { display: grid; gap: 8px; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
-.cal-flow li { padding: 10px; border-radius: 16px; background: var(--surface-soft); border: 1px solid var(--hairline); font-weight: 600; text-align: center; }
+/* 진행 순서: 상자 네 개 대신 위쪽 선 + 왼쪽 정렬 글자(첫 단계만 진하게) */
+.cal-flow { display: grid; gap: 16px 12px; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+.cal-flow li { padding: 10px 2px 0; border-top: 2px solid var(--hairline-strong); font-weight: 600; color: var(--body-strong); text-align: left; }
+.cal-flow li:first-child { border-top-color: var(--ink); }
 @media (max-width: 520px) {
   .cal-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cal-choices.cal-3 .cal-choice { padding: 8px 6px; }
 }
 @media (min-width: 720px) { .cal-start-grid.cal-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .cal-program { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: start; padding: 18px 20px; }
-.cal-program-icon { width: 48px; height: 48px; border-radius: 9999px; background: #fffaf0; display: inline-flex; align-items: center; justify-content: center; }
+.cal-program-icon { width: 48px; height: 48px; border-radius: 9999px; background: var(--surface-card); border: 1px solid var(--hairline-strong); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; }
 @media (max-width: 420px) { .cal-program { grid-template-columns: minmax(0, 1fr); } }
 /* 0–10 크기 차트(매핑 차트처럼 위가 10) */
 .cal-loud { gap: 12px; }
 .cal-loud-chart { display: grid; gap: 4px; }
 .cal-loud-row {
   display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 4px 12px 4px 6px;
-  border-radius: 12px; border: 1.5px solid transparent; background: var(--surface-soft);
+  border-radius: var(--r-md); border: 1.5px solid transparent; background: var(--surface-soft);
   color: var(--body-strong); font: inherit; font-size: 16px; font-weight: 600; text-align: left; cursor: pointer;
 }
 .cal-loud-row:hover { border-color: var(--hairline-strong); }

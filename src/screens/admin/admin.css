@@ -74,8 +74,8 @@
 .admin-diff del::before { content: '전: '; color: var(--muted); text-decoration: none; display: inline-block; }
 .admin-diff ins::before { content: '후: '; color: var(--muted); font-weight: 400; }
 
-.admin-row.is-selected { box-shadow: 0 0 0 2px var(--brand-pink); }
-.admin-row.is-dirty.is-selected { box-shadow: inset 3px 0 0 var(--warning), 0 0 0 2px var(--brand-pink); }
+.admin-row.is-selected { box-shadow: 0 0 0 2px var(--primary); }
+.admin-row.is-dirty.is-selected { box-shadow: inset 3px 0 0 var(--warning), 0 0 0 2px var(--primary); }
 .admin-where { color: var(--body-strong); font-weight: 600; }
 .admin-show { margin-left: auto; }
 .admin-hidden { color: var(--muted); font-style: italic; }
