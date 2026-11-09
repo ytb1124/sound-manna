@@ -2,7 +2,8 @@
 //
 // - url이 null이면 그 스템은 핑크노이즈 자리표시로 만든다(src/audio/placeholder.ts).
 // - url을 넣으면 그 파일을 decodeAudioData로 읽는다. 파일은 prototype/public/audio/ 에 두고
-//   '/audio/hbd_stem_trumpet.flac' 처럼 적는다(파일명 규칙은 구성안 8.2절).
+//   'audio/hbd_stem_trumpet.flac' 처럼 앞에 /를 붙이지 않고 적는다(사이트가 /ci-ensemble-room/ 아래에 있어서
+//   /로 시작하면 파일을 못 찾는다). 파일명 규칙은 구성안 8.2절.
 // - 모든 스템은 길이와 시작 샘플이 같아야 한다(구성안 8.3절).
 // - timelineUrl(선택): 오프라인 분석 JSON(구성안 7.4절). 없으면 불러올 때 버퍼에서 직접 계산한다.
 // - 구간(줄)은 박 단위로 적는다. 녹음을 클릭 트랙에 맞추면(8.2절) bpm과 startOffsetSec만 맞추면 그대로 쓸 수 있다.
@@ -44,31 +45,35 @@ export const SONGS: Record<SongId, SongConfig> = {
     },
     undecided: false,
     meter: 3,
-    bpm: 90, // 임시값
-    startOffsetSec: 0,
-    placeholderDurationSec: 35, // 임시값(구성안은 60–90초)
+    // 2026-11 녹음(HBD_Stem): 100 BPM, 카혼이 0.6초에 첫 마디 첫 박으로 들어온다.
+    // 피아노는 0초부터 전주, 4마디(12박) 뒤 7.2초에 멜로디 못갖춘마디("생일")가 나온다.
+    // 1절 = 24박(14.4초). 2절 7.2+14.4 = 21.6초, 3절 36.0초. 3절 3줄 끝에 한 마디 늘임(늘임표)이 있다.
+    bpm: 100,
+    startOffsetSec: 0.6,
+    placeholderDurationSec: 56.4, // 실제 파일이 있으면 쓰이지 않는다
     stems: {
-      piano: { url: null },
-      cajon: { url: null },
-      bass: { url: null },
-      trumpet: { url: null },
-      bassOct: { url: null },
+      piano: { url: 'audio/hbd_stem_piano.flac' },
+      cajon: { url: 'audio/hbd_stem_cajon.flac' },
+      bass: { url: 'audio/hbd_stem_bass.flac' },
+      trumpet: { url: 'audio/hbd_stem_trumpet.flac' },
+      // 따로 녹음한 옥타브 테이크가 아직 없어서, 베이스 녹음을 한 옥타브 올린 임시 파일이다.
+      bassOct: { url: 'audio/hbd_stem_bass_oct.flac' },
     },
-    // 줄 = 못갖춘마디 시작(여린박)부터 다음 줄 여린박 전까지. 1회차 선율 기준.
+    // 줄 = 못갖춘마디 시작(여린박)부터 다음 줄 여린박 전까지. 1절 선율 기준(박 11 = 7.2초).
     lines: [
-      { id: 'line1', get label() { return tx('1줄', 'Line 1'); }, startBeat: 2, endBeat: 8 },
-      { id: 'line2', get label() { return tx('2줄', 'Line 2'); }, startBeat: 8, endBeat: 14 },
+      { id: 'line1', get label() { return tx('1줄', 'Line 1'); }, startBeat: 11, endBeat: 17 },
+      { id: 'line2', get label() { return tx('2줄', 'Line 2'); }, startBeat: 17, endBeat: 23 },
       {
         id: 'line3',
         get label() { return tx('3줄', 'Line 3'); },
-        startBeat: 14,
-        endBeat: 20,
+        startBeat: 23,
+        endBeat: 29,
         get note() { return tx('멜로디가 크게 뛰어오르는 곳(한 옥타브)', 'Where the melody makes a big jump up (one octave)'); },
       },
-      { id: 'line4', get label() { return tx('4줄', 'Line 4'); }, startBeat: 20, endBeat: 26 },
+      { id: 'line4', get label() { return tx('4줄', 'Line 4'); }, startBeat: 29, endBeat: 35 },
     ],
-    calibLoopBeats: [3, 15],
-    bassLoopBeats: [3, 9],
+    calibLoopBeats: [12, 24],
+    bassLoopBeats: [12, 18],
   },
   song2: {
     id: 'song2',

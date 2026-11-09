@@ -92,20 +92,24 @@ src/
 
 ## 핑크노이즈를 실제 음원으로 바꾸는 방법
 
+> **곡 1(생일 축하합니다)은 2026-11에 실제 녹음으로 바꿨어요.** 원본 `HBD_Stem`(48 kHz WAV 4개)을 모노 16비트 FLAC로 바꾸고, 네 스템에 같은 −3 dB를 줘서 합주 −23 LUFS·피크 −4 dBFS로 맞췄어요(악기 사이 크기는 원본 그대로). 피아노만 스테레오라 모노로 섞고 +2.7 dB로 원래 크기를 맞췄어요. `hbd_stem_bass_oct.flac`은 따로 녹음한 테이크가 없어서 베이스를 한 옥타브 올린 **임시 파일**이에요. 곡 2는 아직 핑크노이즈예요.
+
 1. 파일을 `prototype/public/audio/`에 넣어요. 파일명은 구성안 8.2절 규칙을 따라요.
-   - 스템: `hbd_stem_cajon.flac`, `hbd_stem_bass.flac`, `hbd_stem_trumpet.flac`, `hbd_stem_bass_oct.flac` (곡 2도 같은 형식)
+   - 스템: `hbd_stem_piano.flac`, `hbd_stem_cajon.flac`, `hbd_stem_bass.flac`, `hbd_stem_trumpet.flac`, `hbd_stem_bass_oct.flac` (곡 2도 같은 형식)
    - 모든 스템은 **길이와 시작 샘플이 같아야** 해요(8.3절). 모노 권장(스테레오면 앱이 모노로 섞어요).
    - FLAC가 안 되는 브라우저가 있으면 AAC(.m4a)도 돼요(`decodeAudioData`가 읽는 형식이면 무엇이든).
 2. [`src/config/songs.ts`](src/config/songs.ts)에서 해당 스템의 `url`을 채워요.
    ```ts
    stems: {
-     cajon:   { url: '/audio/hbd_stem_cajon.flac' },
-     bass:    { url: '/audio/hbd_stem_bass.flac' },
-     trumpet: { url: '/audio/hbd_stem_trumpet.flac' },
-     bassOct: { url: '/audio/hbd_stem_bass_oct.flac' },
+     piano:   { url: 'audio/hbd_stem_piano.flac' },
+     cajon:   { url: 'audio/hbd_stem_cajon.flac' },
+     bass:    { url: 'audio/hbd_stem_bass.flac' },
+     trumpet: { url: 'audio/hbd_stem_trumpet.flac' },
+     bassOct: { url: 'audio/hbd_stem_bass_oct.flac' },
    },
    ```
    `url`이 `null`인 스템만 핑크노이즈로 남아요. 스템 일부만 먼저 바꿔도 돼요.
+   경로 앞에 `/`를 붙이지 마세요. 사이트가 `/ci-ensemble-room/` 아래에 있어서 `/audio/...`는 배포 사이트에서 파일을 못 찾아요.
 3. 같은 파일에서 `bpm`, `startOffsetSec`(카혼 예비박 첫 박이 파일의 몇 초인지), `lines`(1–4줄 구간, 박 단위), `calibLoopBeats`, `bassLoopBeats`를 녹음에 맞춰요. 클릭 트랙에 맞춰 녹음했다면 bpm과 시작 위치만 맞추면 돼요. `placeholderDurationSec`은 자리표시 전용이라 실제 파일이 있으면 무시돼요.
 4. (선택) 오프라인 분석 타임라인(8.1 F, `tl_hbd_trumpet.json` 등)이 있으면 `timelineUrl`에 넣어요. 형식: `{ "hop": 0.01, "rms": [...], "onsets": [{ "t": 1.23, "strength": 0.8, "kind": "slap" }], "pitch": [...] }`. 없으면 앱이 불러올 때 RMS와 온셋을 직접 계산해요(음높이 선은 JSON이 있어야 보여요).
 5. 단서 질문 편집본(8.1 D)은 [`src/audio/probeAudio.ts`](src/audio/probeAudio.ts)의 `PROBE_FILES`에 경로를 넣어요(`p_hbd_orig.wav` 등). `PROBE_MANIFEST`의 설명(공개 표·내보내기에 쓰임)도 실제 처리 내용으로 고쳐요.
