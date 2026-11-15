@@ -80,7 +80,7 @@ export function buildExport() {
 }
 
 export function downloadJSON() {
-  download(`cihall-export-${stamp()}.json`, JSON.stringify(buildExport(), null, 2), 'application/json');
+  download(`sound-manna-export-${stamp()}.json`, JSON.stringify(buildExport(), null, 2), 'application/json');
 }
 
 function csvCell(v: unknown): string {
@@ -108,7 +108,7 @@ export function buildCSV(responses: ProbeResponse[]): string {
 }
 
 export function downloadCSV() {
-  download(`cihall-probe-${stamp()}.csv`, buildCSV(probeStore.get().responses), 'text/csv;charset=utf-8');
+  download(`sound-manna-probe-${stamp()}.csv`, buildCSV(probeStore.get().responses), 'text/csv;charset=utf-8');
 }
 
 // ───────── 전체 삭제 ─────────

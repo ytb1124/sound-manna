@@ -8,7 +8,7 @@
 - 사이트: https://taebin.link/sound-manna/ (관리자: `#/admin`)
 - 저장소: https://github.com/ytb1124/sound-manna — **공개 저장소**
 - 팀(관리자): 유태빈, 이현민, 송기화, 이한설
-- 기준 문서는 저장소 밖(상위 폴더)에 있다: `../DESIGN.md`(0절 Project Overrides가 원본보다 우선), `../reports/인공와우 인터랙티브 합주실 구성안.md`(화면과 동작)
+- 기준 문서는 저장소 밖(상위 폴더)에 있다: `../DESIGN.md`(0절 Project Overrides가 원본보다 우선), `../reports/Sound Manna 구성안.md`(화면과 동작)
 
 ## 명령과 배포
 
