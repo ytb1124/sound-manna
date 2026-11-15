@@ -1,8 +1,8 @@
 // 곡 설정. 실제 녹음이 준비되면 이 파일의 `url`만 채우면 된다(README "핑크노이즈를 실제 음원으로 바꾸기").
 //
 // - url이 null이면 그 스템은 핑크노이즈 자리표시로 만든다(src/audio/placeholder.ts).
-// - url을 넣으면 그 파일을 decodeAudioData로 읽는다. 파일은 prototype/public/audio/ 에 두고
-//   'audio/hbd_stem_trumpet.flac' 처럼 앞에 /를 붙이지 않고 적는다(사이트가 /ci-ensemble-room/ 아래에 있어서
+// - url을 넣으면 그 파일을 decodeAudioData로 읽는다. 파일은 public/audio/ 에 두고
+//   'audio/hbd_stem_trumpet.flac' 처럼 앞에 /를 붙이지 않고 적는다(사이트가 /sound-manna/ 아래에 있어서
 //   /로 시작하면 파일을 못 찾는다). 파일명 규칙은 구성안 8.2절.
 // - 모든 스템은 길이와 시작 샘플이 같아야 한다(구성안 8.3절).
 // - timelineUrl(선택): 오프라인 분석 JSON(구성안 7.4절). 없으면 불러올 때 버퍼에서 직접 계산한다.

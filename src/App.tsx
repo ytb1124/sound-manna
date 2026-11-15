@@ -31,14 +31,14 @@ function TopBar() {
   const admin = pathname.startsWith('/admin');
   return (
     <header className="topbar">
-      <NavLink to="/" className="brand" aria-label={tx('소리와 만나 처음으로', 'Sound Manna home')}>
+      <NavLink to="/" className="brand" aria-label={tx('Sound Manna 처음으로', 'Sound Manna home')}>
         <svg width="28" height="28" viewBox="0 0 64 64" aria-hidden="true">
           <rect width="64" height="64" rx="8" fill="var(--primary)" />
           <circle cx="24" cy="40" r="9" fill="var(--on-primary)" />
           <rect x="31" y="14" width="5" height="27" rx="2.5" fill="var(--on-primary)" />
           <path d="M36 14c8 2 12 6 12 12" stroke="var(--on-primary)" strokeWidth="5" fill="none" strokeLinecap="round" />
         </svg>
-        {tx('소리와 만나', 'Sound Manna')}
+        Sound Manna
       </NavLink>
       {!minimal && (
         <nav aria-label={tx('주 메뉴', 'Main menu')}>
@@ -75,7 +75,7 @@ function LangSync() {
   const lang = useLang();
   useEffect(() => {
     document.documentElement.lang = lang;
-    document.title = tx('소리와 만나', 'Sound Manna');
+    document.title = 'Sound Manna';
   }, [lang]);
   return null;
 }

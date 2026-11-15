@@ -1,12 +1,12 @@
-# 소리와 만나 (ci-ensemble-room)
+# Sound Manna
 
-플랫폼 이름은 **소리와 만나**(만나: 성서의 만나), 합주실 이름은 **만나 합주실**이다. 영어는 임시로 Sound Manna / Manna Ensemble Room.
+플랫폼 이름은 **Sound Manna**이며, 화면 내 합주실 이름은 **만나 합주실**(Manna Ensemble Room)이다.
 
 인공와우(CI) 사용자가 악기별로 소리를 켜고 끄며 "나에게 잘 들리는 소리"를 찾는 웹 프로토타입. 주 사용자는 한국어를 쓰는 CI 사용자(고령 포함).
 자세한 화면·구조·가정은 [README.md](README.md), 요구사항 진행 상황은 [CHECKLIST.md](CHECKLIST.md)에 있다. 이 파일은 작업할 때 꼭 지킬 것만 적는다.
 
-- 사이트: https://taebin.link/ci-ensemble-room/ (관리자: `#/admin`)
-- 저장소: https://github.com/ytb1124/ci-ensemble-room — **공개 저장소**
+- 사이트: https://taebin.link/sound-manna/ (관리자: `#/admin`)
+- 저장소: https://github.com/ytb1124/sound-manna — **공개 저장소**
 - 팀(관리자): 유태빈, 이현민, 송기화, 이한설
 - 기준 문서는 저장소 밖(상위 폴더)에 있다: `../DESIGN.md`(0절 Project Overrides가 원본보다 우선), `../reports/인공와우 인터랙티브 합주실 구성안.md`(화면과 동작)
 
