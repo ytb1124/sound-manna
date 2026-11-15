@@ -1,6 +1,6 @@
-# Sound Manna
+# 소리와 만나 (Sound Manna)
 
-기준 문서는 팀의 `Sound Manna 구성안.md`(화면과 동작)와 `DESIGN.md`(0절 Project Overrides가 원본보다 우선)예요. 두 문서는 이 저장소에 들어 있지 않아요.
+기준 문서는 팀의 `소리와 만나 구성안.md`(화면과 동작)와 `DESIGN.md`(0절 Project Overrides가 원본보다 우선)예요. 두 문서는 이 저장소에 들어 있지 않아요.
 구성안의 각 요구사항을 어디까지 구현했는지는 [`CHECKLIST.md`](CHECKLIST.md)에 정리했어요.
 
 > **지금은 시험판이에요.** 실제 악기 녹음 대신 악기마다 독립된 **핑크노이즈**가 나요. 음높이가 있는 소리(합성 멜로디)는 없어요.

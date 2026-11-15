@@ -18,7 +18,7 @@ export default function Start() {
   return (
     <main className="page page-narrow stack-lg">
       <header className="stack" style={{ paddingTop: 16 }}>
-        <h1 style={{ fontSize: 40, margin: 0 }}>Sound Manna</h1>
+        <h1 style={{ fontSize: 40, margin: 0 }}>{tx('소리와 만나', 'Sound Manna')}</h1>
         <p className="lead" style={{ margin: 0 }}>
           {tx(
             '정답을 맞히는 곳이 아니라, 나에게 잘 들리는 소리를 찾아보는 곳이에요.',
